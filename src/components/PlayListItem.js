@@ -1,31 +1,21 @@
 import React, { Component } from 'react';
 
-class PlayListItem extends Component {
+
+
+export default class PlayListItem extends Component {
 
   render() {
     return (
-      <div>
-         {this.props.songs.map((block) => {
-          return(
-            <div className="card">
+      <div className="PlayList">
+        <form onSubmit={this.handleFormUpdate}>
+          <button type='submit'>Add to the List</button>
+        </form>
+        <div>
+          <PlayListItem songs={this.props.songs}/>
 
+        </div>
+      </div>
 
-
-
-
-
-
-            </div>
-
-          )
-        })}
-
-    </div>
     );
   }
-
-
-
 }
-
-export default PlayListItem;
