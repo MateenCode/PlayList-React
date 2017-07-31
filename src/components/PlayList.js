@@ -1,27 +1,35 @@
 import React, { Component } from 'react';
-import '../styles/App.css'
 import PlayListItem from './PlayListItem'
 
 export default class PlayList extends Component {
-
-    constructor(props){
+    constructor(props) {
       super(props)
-
-    this.handleFormUpdate = this.handleFormUpdate.bind(this);
-  }
-      handleFormUpdate(e){
-        e.preventDefault();
-        this.props.handleFormUpdate();
+      this.state = {
+        songs: []
       }
-
-  render(){
+    }
+    componentDidMount() {
+      fetch('https://tiny-lasagna-server.herokuapp.com/collections/playlisting').then(results => {
+            return results.json();
+          }).then(data => {
+            this.setState({songs: data});
+            console.log("state", this.state.songs);
+          })
+    }
+    fetchData = (e) => {
+        e.preventDefault();
+        fetch('https://tiny-lasagna-server.herokuapp.com/collections/playlisting').then(results => {
+          return results.json();
+        }).then(data => {
+          this.setState({songs: data});
+        })
+      }
+    render() {
     return (
-      <div>
-
-
-
+      <div className="playlist">
+        <button onClick={this.fetchData} type="submit">Update</button>
+        <PlayListItem songs={this.state.songs}/>
       </div>
-
-    )
+    );
   }
 }

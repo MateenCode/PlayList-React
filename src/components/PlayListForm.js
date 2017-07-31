@@ -1,77 +1,114 @@
-import React, {Component} from 'react';
-import PlayList from './PlayList';
+import React, { Component } from 'react';
 
 export default class PlayListForm extends Component {
-  constructor(props){
-    super(props)
-     this.state = {
-       songs: [],
-       userName: '',
-       songArtist: '',
-       songTitle:'',
-       songNotes: ''
-     }
+  constructor() {
+    super()
+    this.state ={
+      userName: '',
+      songArtist: '',
+      songTitle: '',
+      songNotes: '',
+      songs: []
+    }
+  }
 
-this.handleUserName = this.handleUserName.bind(this)
-this.handleArtistChange = this.handleArtistChange.bind(this)
-this.handleTitleChange = this.handleTitleChange.bind(this)
-this.handleNotesChange = this.handleNotesChange.bind(this)
-this.addToList = this.addToList.bind(this)
+  handleUserName = (e) => {
+    e.preventDefault()
+    this.setState({
+      userName: e.target.value
+    })
+  }
 
-}
+  handleSongArtist = (e) => {
+    e.preventDefault()
+    this.setState({
+      songArtist: e.target.value
+    })
+  }
 
+  handleSongTitle = (e) => {
+    e.preventDefault()
+    this.setState({
+      songTitle: e.target.value
+    })
+  }
 
+  handleSongNotes = (e) => {
+    e.preventDefault()
+    this.setState({
+      songNotes: e.target.value
+    })
+  }
 
-handleUserName(event){
-  this.setState({
-    userName : event.target.value,
-  })
-}
+  addToList = (e) => {
+      e.preventDefault();
+      function fetchData (){
+          e.preventDefault();
+          fetch('https://tiny-lasagna-server.herokuapp.com/collections/playlisting').then(results => {
+            return results.json();
+          }).then(data => {
+            this.setState({songs: data});
+          })
+        }
+      this.setState({
+        userName: e.target.value,
+        songTitle: e.target.value,
+        songArtist: e.target.value,
+        songNotes: e.target.value
+      });
+      let listItem = JSON.stringify(this.state);
 
-
-handleArtistChange(event){
-  this.setState({
-    songArtist : event.target.value,
-  })
-}
-
-handleTitleChange(event){
-  songTitle: event.target.value
-}
-
-handleNotesChange(event){
-  songNotes: event.target.value
-}
-
-
-
-  ).then(response => {
-    console.log(response, "yay");
-
-  }).catch(err => {
-    console.log(err, "boo!");
-  });
-  this.setState({userName: '', songNotes: '', songArtist: '', songTitle:''});
-}
-
+      fetch("https://tiny-lasagna-server.herokuapp.com/collections/playlisting", {
+        method: "POST",
+        body: listItem,
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+      }
+    }
+    ).then(response => {
+      console.log(response, "yay");
+    })
+    // .then(fetchData)
+    .catch(err => {
+      console.log(err, "boo!");
+    });
+    this.setState({userName: '', songNotes: '', songArtist: '', songTitle:''});
+  }
   render() {
 
 
     return (
 
-        <div className="form">
-          <form>
-            <input type='text' name='userName' placeholder ='User Name'/>
-            <input type='text' name='songArtist' placeholder ='Song Artist'/>
-            <input type='text' name='songTitle' placeholder ='Song Title'/>
-            <input type='text' name='songNotes' placeholder ='Song Notes'/>
-          </form>
-          <div>
-            <button type='submit'>Submit</button>
-          </div>
-          <PlayList handleUpdate={this.fetchData} songs={this.state.songs} />
-          </div>
-
+      <div className="form">
+        <form>
+          <input onChange={this.handleUserName}
+            type="text"
+            className="form-control"
+            id="user"
+            placeholder="Name or User Name"
+            value={this.state.userName}/>
+          <input onChange={this.handleSongArtist}
+            type="text"
+            className="form-control"
+            id="artist"
+            placeholder="Artist or Band Name"
+            value={this.state.songArtist} />
+          <input onChange={this.handleSongTitle}
+            type="text"
+            className="form-control"
+            id="title"
+            placeholder="Song Title"
+            value={this.state.songTitle} />
+          <input onChange={this.handleSongNotes}
+            type="text"
+            className="form-control"
+            id="notes"
+            placeholder="Notes"
+            value={this.state.songNotes} />
+          <button onClick={this.addToList} type="submit">Submit</button>
+        </form>
+      </div>
 
       )
     }
