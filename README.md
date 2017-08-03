@@ -1,6 +1,6 @@
 ## PlayList-React
 
-A simple playlist app that demonstrate the use of passing states and props through different components with a live demo data server 
+A simple playlist app that demonstrate the use of passing states and props through different components with a live demo data server.
 
 ## ScreenShot
 
